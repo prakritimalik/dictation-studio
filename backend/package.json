@@ -1,14 +1,20 @@
 {
   "name": "dictation-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "🎤 Voice Dictation Studio Backend API",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["voice", "dictation", "transcription", "openai", "whisper"],
+  "author": "Prakriti Malik",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

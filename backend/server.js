@@ -9,7 +9,19 @@ import FormData from 'form-data';
 dotenv.config();
 const app = express();
 const upload = multer({ dest: 'uploads/' });
-app.use(cors());
+// Configure CORS for production
+const corsOptions = {
+  origin: [
+    'http://localhost:5173', // Vite dev server
+    'http://localhost:3000', // Alternative dev server
+    'https://whisper.pmalik.xyz', // Production domain
+    'https://deploy-preview-*.netlify.app', // Netlify preview deployments
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -77,7 +89,22 @@ app.post('/api/polish', async (req, res) => {
   }
 });
 
+// Health check endpoint for Railway
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: '🎤 Voice Dictation Studio API', 
+    version: '1.0.0',
+    endpoints: ['/api/transcribe', '/api/polish']
+  });
+});
+
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
